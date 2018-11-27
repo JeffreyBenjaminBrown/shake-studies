@@ -1,3 +1,16 @@
+* rules look lke this
+** this
+<pattern> %> \out -> do
+    <actions>
+(where the angle brackets aren't missing)
+** Whatever matches "pattern" is bound to "out" in the lambda.
+* // is like * for paths
+** "The * wildcard matches anything apart from a directory separator. For example "manual/*.txt" would define a rule for any .txt file in the manual directory, including manual/examples.txt, but would not match manual/examples.zip, examples.txt or manual/docs/examples.txt."
+** "The // wildcard matches any number of complete path components. For example //*.txt would define a rule for any .txt file, including manual/examples.txt."
+* `<.> exe` adds an extension if OS-appropriate
+* use -<.> to strip an extension and replace it
+** TODO What if there are multiple dots in the name?
+
 * use fewer calls to need, if possible
 ** how: make the list argument to "need" longer
 rather than calling it more than once in the same do-expression
