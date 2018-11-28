@@ -1,3 +1,6 @@
+* TODO install stack in Docker
+asking Reddit: http://www.reddit.com/r/haskellquestions/comments/a10cs7/how_to_add_stack_to_a_docker_environment/
+for a history of my attempts: see github/jeff/tax.co, branch "install-stack"
 * rules look lke this
 ** this
 <pattern> %> \out -> do
