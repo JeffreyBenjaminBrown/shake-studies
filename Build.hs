@@ -10,4 +10,4 @@ main = shakeArgs shakeOptions{shakeFiles="_build"} $ do
   want ["_build/test.txt"]
 
   "_build/test.txt" %> \_ -> do
-    shell "echo testing" ">> _build/test.txt"
+    cmd_ "echo testing" ">> _build/test.txt"
