@@ -1,27 +1,4 @@
 * questions
-** What does "$@" mean in `&& _shake/build "$@"`?
-It's part of build.sh in the shake demo:
-
-#!/bin/sh
-mkdir -p _shake
-ghc --make Build.hs -rtsopts -threaded -with-rtsopts=-I0 -outputdir=_shake -o _shake/build && _shake/build "$@"
-** How can I redirect output from a command into a file?
-** How can I run shake from a docker container?
-*** the container
-https://github.com/JeffreyBenjaminBrown/tax.co/blob/master/docker/Dockerfile
-*** what happens when I try
-(base) root@127:/mnt# stack exec ./build.sh
-You are not the owner of '/mnt/.stack-work/'. Aborting to protect file permissions.
-Retry with '--allow-different-user' to disable this precaution.
-(base) root@127:/mnt# ls -al | grep ".stack-work"
-drwxrwxr-x  6 1000 1000 4096 Nov 30 19:39 .stack-work
-(base) root@127:/mnt# whoami
-root
-(base) root@127:/mnt# id
-uid=0(root) gid=0(root) groups=0(root)
-* TODO install stack in Docker
-asking Reddit: http://www.reddit.com/r/haskellquestions/comments/a10cs7/how_to_add_stack_to_a_docker_environment/
-for a history of my attempts: see github/jeff/tax.co, branch "install-stack"
 * rules look lke this
 ** this
 <pattern> %> \out -> do
@@ -49,3 +26,31 @@ cmd_ ["gcc","-o","_make/run","_build/main.o","_build/constants.o"]
 ** `<.> exe` adds an extension if OS-appropriate
 ** use -<.> to strip an extension and replace it
 *** TODO What if there are multiple dots in the name?
+* to redirect output (ala piping with > or >>)
+  "_build/test.txt" %> \_ ->
+    cmd "echo testing"
+    >>= \(Stdout x) -> writeFile' "_build/test.txt" x
+* What "$@" means in `&& _shake/build "$@"
+** I think it's a magic Bash operator to hand all arguments from caller to callee
+https://www.quora.com/What-does-%E2%80%9C-%E2%80%9D-mean-in-Bash
+** why I ask
+It's part of build.sh in the shake demo:
+
+#!/bin/sh
+mkdir -p _shake
+ghc --make Build.hs -rtsopts -threaded -with-rtsopts=-I0 -outputdir=_shake -o _shake/build && _shake/build "$@"
+* How to run shake from a docker container
+** DONE inelegant but easy fix: use --allow-different-user
+stack exec ./build.sh --allow-different-user
+** what happens when I try without that option
+(base) root@127:/mnt# stack exec ./build.sh
+You are not the owner of '/mnt/.stack-work/'. Aborting to protect file permissions.
+Retry with '--allow-different-user' to disable this precaution.
+(base) root@127:/mnt# ls -al | grep ".stack-work"
+drwxrwxr-x  6 1000 1000 4096 Nov 30 19:39 .stack-work
+(base) root@127:/mnt# whoami
+root
+(base) root@127:/mnt# id
+uid=0(root) gid=0(root) groups=0(root)
+** the container
+https://github.com/JeffreyBenjaminBrown/tax.co/blob/master/docker/Dockerfile

@@ -26,13 +26,17 @@ source-repository head
 
 library
   exposed-modules:
-      Lib
+                  Lib
+                , Development.Shake
+                , Development.Shake.Command
+                , Development.Shake.FilePath
+                , Development.Shake.Util
   other-modules:
       Paths_shake_studies
   hs-source-dirs:
       src
   build-depends:
-                base >=4.7 && <5
+                base
                 , shake
   default-language: Haskell2010
 
